@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件发布管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            top: 45%;
+            left: 50%;
+            position: absolute;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .xiaoacao_footer {
+            height: 35px;
+            line-height: 35px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: transparent;
+            color: white;
+            font-family: Arial;
+            font-size: 14px;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+        
+        body {
+           /* background-color: rgba(0, 0, 0, .8); */
+			background: url(../images/loginbg.png) 0% 0% / cover no-repeat;
+        }
+        
+        .change {
+            perspective: 1000;
+            width: 428px;
+            height: 428px;
+            transition: all 2s;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        
+        .login-main,
+        .sign-main {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0.4px solid white;
+            border-radius: 5%;
+        }
+        
+        .login-main {
+            z-index: 1;
+            background-color: white;
+        }
+        /* back, initially hidden pane */
+        
+        .sign-main {
+            transform: translateZ(-1px) rotateY(180deg);
+            background-color: white;
+        }
+        
+        .login-main .login-bottom .center .item input {
+            display: inline-block;
+            width: 220px;
+            height: 28px;
+            padding: 0;
+            border-radius: 24px;
+            /* border: 1px solid #A6FFFF; */
+            background: none;
+            position: absolute;
+            outline: 0;
+            border: 0;
+            /* border-right: 1px solid white;
+            border-bottom: 1px solid white; */
+            padding-left: 10px;
+            color: black;
+            font-size: 14px;
+            letter-spacing: 0;
+            transition: all 0.5s;
+            box-shadow: inset 1px 1px #c4c3c3, 1px 1px #c4c3c3;
+        }
+        /* .login-main .login-bottom .center .item input [type="password"]:focus { */
+        
+        input:focus {
+            border: 1px solid #A6FFFF !important;
+        }
+        
+        .login-main .login-bottom .center .item .icon-2 {
+            background: url(../images/icon-login.png) no-repeat -54px 0;
+        }
+        
+        .login-main .login-bottom .center .item .icon-3 {
+            background: url(../images/icon-login.png) no-repeat -106px 0;
+        }
+        
+        .login-main .login-bottom .center .item .icon-4 {
+            background: url(../images/icon-login.png) no-repeat 0 -43px;
+            position: absolute;
+            right: -25px;
+            cursor: pointer;
+        }
+        
+        .login-main .login-bottom .center .item .icon-5 {
+            background: url(../images/icon-login.png) no-repeat -55px -43px;
+        }
+        
+        .login-main .login-bottom .tip .icon-nocheck {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            border: solid 1px #9abcda;
+            position: relative;
+            top: 2px;
+            margin: 1px 8px 1px 1px;
+            cursor: pointer;
+        }
+        
+        .login-main .login-bottom .tip .icon-check {
+            margin: 0 7px 0 0;
+            width: 14px;
+            height: 14px;
+            border: none;
+            background: url(../images/icon-login.png) no-repeat -111px -48px;
+        }
+        
+        .login-main .login-bottom .center .item .icon {
+            display: inline-block;
+            width: 33px;
+            height: 22px;
+        }
+        
+        .login-main .login-bottom .center .item {
+            width: 288px;
+            height: 35px;
+            /* border-bottom: 1px solid #dae1e6; */
+            margin-bottom: 35px;
+        }
+        /* .center .item input[type="text"] {
+            border-radius: 24px;
+            display: block;
+            color: white;
+            background: none;
+            border: 1px solid #2ecc71;
+        } */
+        
+        .login-main .login-top {
+            height: 117px;
+            /* background-color: #148be4; */
+            /* border-radius: 12px 12px 0 0; */
+            font-family: SourceHanSansCN-Regular;
+            font-size: 30px;
+            font-weight: 400;
+            font-stretch: normal;
+            letter-spacing: 0;
+            color: black;
+            line-height: 117px;
+            text-align: center;
+            overflow: hidden;
+            /* color: white; */
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0);
+        }
+        
+        .login-main .login-top .bg1 {
+            display: inline-block;
+            width: 74px;
+            height: 74px;
+            background: black;
+            opacity: .1;
+            border-radius: 0 74px 0 0;
+            position: absolute;
+            left: 0;
+            top: 43px;
+        }
+        
+        .login-main .login-top .bg2 {
+            display: inline-block;
+            width: 94px;
+            height: 94px;
+            background: #fff;
+            opacity: .1;
+            border-radius: 50%;
+            position: absolute;
+            right: -16px;
+            top: -16px;
+        }
+        
+        .login-main .login-bottom {
+            width: 428px;
+            background: transparent;
+            border-radius: 0 0 12px 12px;
+            padding-bottom: 53px;
+        }
+        
+        .login-main .login-bottom .center {
+            width: 288px;
+            background-color: transparent;
+            margin: 0 auto;
+            padding-top: 37px;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .login-main .login-bottom .tip {
+            clear: both;
+            height: 16px;
+            line-height: 16px;
+            width: 288px;
+            margin: 0 auto;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .login-main .login-bottom .tip .login-tip {
+            font-family: MicrosoftYaHei;
+            font-size: 15px;
+            font-weight: 400;
+            font-stretch: normal;
+            letter-spacing: 0;
+            color: black;
+            cursor: pointer;
+        }
+        
+        .login-main .login-bottom .tip .login-tip:hover {
+            color: #1E9FFF;
+        }
+        
+        .login-main .login-bottom .tip .forget-password {
+            font-stretch: normal;
+            letter-spacing: 0;
+            color: black;
+            text-decoration: none;
+            position: absolute;
+            font-size: 15px;
+            right: 62px;
+        }
+        
+        .login-main .login-bottom .tip .forget-password:hover {
+            color: #1E9FFF;
+        }
+        
+        .login-main .login-bottom .login-btn {
+            width: 80px;
+            height: 40px;
+            border-radius: 24px;
+            background-color: transparent;
+            /* border-radius: 16px; */
+            margin: 24px auto 0;
+            text-align: center;
+            line-height: 40px;
+            color: black;
+            font-size: 16px;
+            /* border: 1px solid; */
+            letter-spacing: 0;
+            cursor: pointer;
+            border: none;
+            background: none;
+            /* border-bottom: 1px solid white;
+            border-right: 1px solid white; */
+            box-shadow: inset 1px 1px #c4c3c3, 1px 1px #c4c3c3;
+            transition: all 0.5s;
+        }
+        
+        .login-main .login-bottom .login-btn:hover {
+            border: 1.5px solid #A6FFFF !important;
+        }
+        
+        .login-main .login-bottom .center .item .validateImg {
+            position: absolute;
+            right: 1px;
+            cursor: pointer;
+            height: 36px;
+            border: 1px solid #e6e6e6;
+        }
+        
+        .padding-5 {
+            padding: 5px !important;
+        }
+        
+        .sign-main .layui-form {
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            background: none;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            /* width: 450px; */
+            /* position: relative; */
+            /* float: left; */
+            /* background-color: transparent; */
+            /* border: 0.4px solid rgba(0, 0, 0, .1); */
+            /* border: 0.4px solid white; */
+            border-radius: 24px;
+            padding: 84px 43px 0px 11px;
+        }
+        
+        .sign-main .layui-form-item input {
+            background: none;
+            /* margin-left: -8px; */
+            margin-bottom: 25px;
+            border: none;
+            outline: none;
+            display: inline-block;
+            border-radius: 24px;
+            padding-left: 15px;
+            /* color: white !important; */
+            font-size: 14px;
+            letter-spacing: 0;
+            transition: all 0.5s;
+            height: 35px;
+            border: 1px solid transparent;
+            box-shadow: inset 1px 1px #c4c3c3, 1px 1px #c4c3c3;
+        }
+        
+        .layui-form-item input:focus {
+            border: 1px solid #1E9FFF !important;
+        }
+        
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 5px;
+            width: 80px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+            position: relative;
+        }
+        
+        .layuimini-form>.layui-form-item>.layui-input-block {
+            margin-left: 150px !important;
+        }
+        
+        .layuimini-form>.layui-form-item>.layui-input-block #btn {
+            margin-left: 106px !important;
+        }
+        
+        .layuimini-form>.layui-form-item>.layui-form-label {
+            width: 100px !important;
+        }
+        
+        .layui-form-label::after {
+            content: "*";
+            color: rgb(255, 0, 0);
+            font-size: 14px;
+            margin-left: 6px;
+            top: 5px;
+            right: 5px;
+            text-align: center;
+        }
+        
+        .layuimini-form>.layui-form-item>.layui-input-block .layui-btn,
+        .re {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            /* border: 1px solid transparent; */
+            color: black;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 24px;
+            background: none;
+            background-color: transparent;
+            box-shadow: inset 1px 1px #c4c3c3, 1px 1px #c4c3c3;
+            transition: all 0.5s;
+        }
+        
+        .re {
+            position: absolute;
+            left: 13%;
+            bottom: 6%;
+        }
+        /* .layui-input-block:nth-last-child(), */
+        
+        .re:hover {
+            /* background-color: #A6FFFF; */
+            border-top: 1px solid #1E9FFF !important;
+            border-bottom: 1px solid #1E9FFF !important;
+            border-left: 1px solid #1E9FFF !important;
+        }
+        
+        #btn:hover {
+            /* background-color: #A6FFFF; */
+            border-top: 1px solid #1E9FFF !important;
+            border-bottom: 1px solid #1E9FFF !important;
+            border-right: 1px solid #1E9FFF !important;
+        }
+        /* .sign-main button:hover, */
+        
+        .sign-main .login-top {
+            height: 120px;
+            width: 100%;
+            /* background-color: #148be4; */
+            /* border-radius: 12px 12px 0 0; */
+            font-family: SourceHanSansCN-Regular;
+            font-size: 30px;
+            font-weight: 400;
+            align-items: center;
+            font-stretch: normal;
+            letter-spacing: 0;
+            color: black;
+            line-height: 120px;
+            text-align: center;
+            /* overflow: hidden; */
+            /* color: white; */
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0);
+        }
+        /* * {
+            margin: 0;
+            padding: 0;
+        } */
+        
+
+        
+
+        
+
+        }
+    </style>
+</head>
+
+<body>
+
+	<!--<ul class="layui-nav layui-layout-right" style="color: white;">	
+
+        <li class="layui-nav-item" lay-unselect>
+            <a href="http://bug.jwele.com/redmine/" target="_blank" style=" color: white;">Bug管理系统</a><i class="fa fa-refresh"></i>
+        </li>	
+		        <li class="layui-nav-item" lay-unselect>
+            <a href="http://driver.test.jwele.com" target="_blank" style=" color: white;">测试驱动下载</a><i class="fa fa-refresh"></i>
+        </li>
+
+    </ul> -->
+
+    <div class="container" id="container">
+        <div class="change" id="change">
+            <div class="login-main">
+                <div class="login-top">
+                    <span>用户登录</span>
+                </div>
+                <form id="myForm" class="layui-form login-bottom">
+                    <div class="center">
+                        <div class="item">
+                            <span class="icon icon-2"></span>
+                            <input type="text" name="username" lay-verify="required" placeholder="请输入账号" maxlength="24" />
+                        </div>
+                        <div class="item">
+                            <span class="icon icon-3"></span>
+                            <input type="password" id="pwd" name="pwd" lay-verify="required" placeholder="请输入密码" maxlength="20" />
+                            <span class="bind-password icon icon-4"></span>
+                        </div>
+                    </div>
+<!--                    <div class="tip">-->
+<!--                        <span id="reg" class="login-tip">注册</span>-->
+<!--                        <a id="fPwd" href="javascript:" class="forget-password">忘记密码？</a>-->
+<!--                    </div>-->
+                    <div class="layui-form-item" style="text-align:center; width:100%;height:100%;margin:0px;">
+                        <button id="loginBtn" lay-submit class="login-btn" lay-filter="login">立即登录</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="p3"></div>
+    <div class="bear"></div>
+    <div class="xiaoacao_footer">
+        <p>JWIPC 设计验证部 © 2024 Eva Yang</p>
+    </div>
+
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../js/api.js"></script>
+	<!-- <script src="../js/1.js"></script> -->
+
+
+
+
+</body>
+
+<script>
+    layui.use(['form', 'jquery'], function() {
+
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer;
+
+        $("#myForm").attr('action', apiUrl + '/user/login');
+        $("#myForm").attr('methon', 'post');
+        // 登录过期的时候，跳出ifram框架
+        if (top.location != self.location) top.location = self.location;
+
+        $('.bind-password').on('click', function() {
+            let hasClass = $(this).hasClass('icon-5');
+            console.log(hasClass)
+
+            let password = document.getElementById("pwd")
+            if ($(this).hasClass('icon-5')) {
+                $(this).removeClass('icon-5');
+                password.type = "password"
+            } else {
+                $(this).addClass('icon-5');
+                $("input[name='password']").attr('type', 'text');
+                password.type = "text"
+            }
+        });
+
+        $('.icon-nocheck').on('click', function() {
+            if ($(this).hasClass('icon-check')) {
+                $(this).removeClass('icon-check');
+            } else {
+                $(this).addClass('icon-check');
+            }
+        });
+
+        // 进行登录操作
+        form.on('submit(login)', function(data) {
+
+            data = data.field;
+            if (data.username == '') {
+                layer.msg('工号不能为空');
+                return false;
+            }
+            if (data.password == '') {
+                layer.msg('密码不能为空');
+                return false;
+            }
+            $.ajax({
+                url: apiUrl + '/user/login',
+                type: 'get',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                data: data,
+                success: function(res) {
+                    console.log(res)
+                    if (res.code == 1) {
+                        layer.msg('账号或密码错误');
+                    } else {
+                        localStorage.setItem("userRole", res.data.role);
+                        localStorage.setItem("userId", res.data.id)
+                        localStorage.setItem("realName", res.data.realName)
+
+                        localStorage.setItem("permissionIds", res.data.permissionIds)
+
+                        window.location = '../page/index.html';
+                    }
+                    return false;
+                }
+            })
+
+            return false;
+
+        });
+
+        $("#fPwd").on('click', function() {
+            layer.msg("请联系管理员修改密码!")
+
+        });
+
+
+        form.on('submit(saveBtn)', function(data) {
+
+            if ($("#addPwd").val() !== $("#addConfirmPwd").val()) {
+                layer.msg('两次密码输入不一致！');
+                return false;
+            }
+
+            var data = $("#f").serialize(); //输出字符串
+            // console.log($("form").serializeArray()); //输出数组
+
+            $.ajax({
+                url: apiUrl + '/user/save',
+                type: 'post',
+                dataType: 'json',
+                // data: JSON.stringify(data),
+                data: data,
+                success: function(res) {
+                    console.log(res)
+                    if (res.code == 1) {
+
+                        layer.msg(res.msg);
+                        return false;
+                    }
+                    if (res.code == 0) {
+                        // layer.msg("添加成功");
+                        // $('form')[0].reset();
+
+
+                        layer.alert("添加成功", {
+                            icon: 6
+                        }, function() {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            //修改成功后刷新父界面
+                            window.parent.location.reload();
+                        });
+
+
+                        return false;
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>
+
+</html>

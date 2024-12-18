@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加立项文件</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<form id="f" class="layui-form layuimini-form" action="http://localhost:8020/project/save">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">立项日期</label>
+        <div class="layui-input-block">
+            <input type="text" id="itemDateStr" name="itemDateStr" lay-verify="required" placeholder="yyyy-MM-dd" value=""
+                   class="layui-input">
+            <tip></tip>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="itemName" name="itemName" lay-reqtext=""  value="" class="layui-input">
+            <tip></tip>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input type="text" id="author" name="author" lay-reqtext=""  value="" class="layui-input">
+            <tip></tip>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">立项会议参与成员</label>
+        <div class="layui-input-block">
+            <input type="text" id="person" name="person" lay-reqtext=""  value="" class="layui-input">
+            <tip></tip>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" id="remark" name="remark" lay-reqtext=""  value="" class="layui-input">
+            <tip></tip>
+        </div>
+    </div>
+
+
+    <!--    <div class="layui-form-item layui-form-text">-->
+<!--        <label class="layui-form-label">立项评估表详细信息</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <textarea placeholder="请输入内容" name="detail"  class="layui-textarea"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="layui-form-item layui-form-text">-->
+<!--        <div class="layui-input-block">-->
+
+<!--            <button id="ID-upload-demo-size" type="button" class="layui-btn demo-class-accept"-->
+<!--                    lay-options="{accept: 'file'}">-->
+<!--                <i class="layui-icon layui-icon-upload"></i>-->
+<!--                上传文件-->
+<!--            </button>-->
+
+
+<!--            <div class="layui-inline layui-word-aux" id="realityNameDiv" name="realityNameDiv"></div>-->
+<!--            <input type="hidden" id="fileUrl" name="fileUrl"/>-->
+<!--            <input type="hidden" id="realityName" name="realityName"/>-->
+
+
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+    <div class="layui-form-item layui-form-text">
+        <div class="layui-input-block">
+
+            <!--            <button id="ID-upload-demo-size" type="button" class="layui-btn demo-class-accept"-->
+            <!--                    lay-options="{accept: 'file'}">-->
+            <!--                <i class="layui-icon layui-icon-upload"></i>-->
+            <!--                上传文件-->
+            <!--            </button>-->
+
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="ID-upload-demo-size">上传文件</button>
+                <!--                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">-->
+                <!--                    预览：-->
+                <div class="layui-upload-list" id="demo2"></div>
+                <!--                </blockquote>-->
+            </div>
+
+
+            <div class="layui-inline layui-word-aux" id="realityNameDiv" name="realityNameDiv"></div>
+            <input type="hidden" id="fileUrl" name="fileUrl"/>
+            <input type="hidden" id="realityName" name="realityName"/>
+
+
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="btn" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="saveBtn">确认保存</button>
+        </div>
+    </div>
+</form>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/jquery-3.5.1.min.js" charset="utf-8"></script>
+<script src="../js/lay-config.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/api.js"></script>
+
+<script>
+    var fileList = [];
+    $(function () {
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#itemDateStr' //指定元素
+            });
+        });
+
+
+        layui.use(function () {
+            var upload = layui.upload;
+            var layer = layui.layer;
+
+            upload.render({
+                elem: '#ID-upload-demo-size', // 绑定多个元素
+                // url: '', // 此处配置你自己的上传接口即可
+                url: apiUrl + '/file/uploadItem',
+                accept: 'file', // 普通文件
+                done: function (res) {
+                    // layer.msg('上传成功');
+                    // console.log(res);
+                    // $("#realityNameDiv").html(res.realityName);
+                    // $("#fileUrl").val(res.fileUrl);
+                    // $("#realityName").val(res.realityName);
+
+
+                    //上传完毕
+                    layer.msg('上传成功');
+                    $('#demo2').append('<div className="layui-inline layui-word-aux">' + res.realityName + '')
+                    // $('#demo2').append('<div className="layui-inline layui-word-aux">' + res.realityName + '')
+                    // $('#demo2').append('<div className="layui-inline layui-word-aux">' + res.realityName + '')
+                    var realityName = res.realityName;
+                    var fileUrl = res.fileUrl;
+
+                    var subFile = {"realityName": realityName, "fileUrl": fileUrl}
+                    fileList.push(subFile);
+                }
+            });
+        });
+
+
+        layui.use(['form'], function () {
+            var form = layui.form,
+                layer = layui.layer;
+
+
+
+
+
+            //
+            // $("#btn").on('click', function() {
+            //
+            // 			});
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+
+                var data=$("form").serialize(); //输出字符串
+                console.log($("form").serializeArray()); //输出数组
+                console.log(data); //输出数组
+
+                var itemDateStr = $("#itemDateStr").val();
+
+                var itemName = $("#itemName").val();
+
+                var author = $("#author").val();
+                var person = $("#person").val();
+                var remark = $("#remark").val();
+
+
+
+
+
+                var item = {
+                    "itemDateStr": itemDateStr,
+                    "itemName": itemName,
+                    "author": author,
+                    "person": person,
+                    "remark": remark
+                }
+
+                var fil = {
+                    "files": fileList,
+                    "item": item
+                }
+
+                $.ajax({
+                    url: apiUrl+'/item/save',
+                    type: 'post',
+                    dataType: 'json',
+                    // data: JSON.stringify(data),
+                    contentType: "application/json",
+                    data: JSON.stringify(fil),
+                    // data: data,
+                    success: function (res) {
+                        console.log(res)
+                        if (res.code == 1) {
+
+                            layer.msg(res.msg);
+                            return false;
+                        }
+                        if (res.code == 0) {
+
+
+                            layer.alert("添加成功", {icon: 6}, function () {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                //修改成功后刷新父界面
+                                window.parent.location.reload();
+                            });
+
+
+                            return false;
+                        }
+                    }
+                })
+                return false;
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

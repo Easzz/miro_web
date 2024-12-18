@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>审核</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<form id="f" class="layui-form layuimini-form"  action="http://localhost:8020/project/save">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">设备信息</label>
+        <div class="layui-input-block">
+            <input type="text" id="deviceName" name="deviceName" style="background:#CCCCCC" lay-verify="required" readonly="true" lay-reqtext="设备信息不能为空"  value="" class="layui-input">
+            <input type="hidden" name="id" id="id">
+            <input type="hidden" name="agree" id="agree" value="1">
+            <tip></tip>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label ">是否损坏</label>
+        <div class="layui-input-block">
+            <input type="radio" name="isDamage" value="0" title="未损坏" checked>
+            <input type="radio" name="isDamage" value="1" title="损坏" >
+            <tip></tip>
+        </div>
+    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label ">损毁情况</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <input type="text" id="damageText" name="damageText"  value="" class="layui-input">-->
+<!--            <tip></tip>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="btn" class="layui-btn layui-btn-normal" lay-filter="saveBtn">确认归还</button>
+        </div>
+    </div>
+</form>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/jquery-3.5.1.min.js" charset="utf-8"></script>
+<script src="../js/lay-config.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/api.js"></script>
+
+
+<script>
+        var id=getUrlParam("id");
+        var deviceName=getUrlParam("deviceName")
+
+
+        console.log(id)
+        console.log(deviceName)
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+          $ = layui.jquery;
+
+        $("#id").val(id)
+        $("#deviceName").val(deviceName)
+
+
+	$("#btn").on('click', function() {
+
+				        var data=$("form").serialize(); //输出字符串
+				               console.log($("form").serializeArray()); //输出数组
+        console.log(data); //输出数组
+        var j={
+            agree:1,
+            deviceRecordId:id,
+            damage: $("#damage").val()
+        };
+					$.ajax({
+						url: apiUrl+'/device/inAuditSingle',
+						type: 'post',
+						dataType: 'json',
+						// data: JSON.stringify(data),
+						data: j,
+						success: function(res) {
+							console.log(res)
+							if(res.code==1){
+
+								layer.msg(res.msg);
+								return false;
+							}
+							if(res.code==0){
+								 layer.alert("审核成功", {icon: 6}, function () {
+								                           // 获得frame索引
+								                           var index = parent.layer.getFrameIndex(window.name);
+								                           //关闭当前frame
+								                           parent.layer.close(index);
+								                           //修改成功后刷新父界面
+								                           window.parent.location.reload();
+								                       });
+
+
+								return false;
+							}
+						}
+					})
+				return false;
+				});
+
+    });
+</script>
+</body>
+</html>

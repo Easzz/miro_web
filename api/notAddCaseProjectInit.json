@@ -1,0 +1,49 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "../page/item.html"
+  },
+  "logoInfo": {
+    "title": "文件发布管理",
+    "image": "../images/file-logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "文件发布管理",
+      "icon": "",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "立项纪要",
+          "href": "",
+          "icon": "",
+          "target": "_self",
+          "child": [
+            {
+              "title": "立项文件",
+              "href": "item.html",
+              "icon": "",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "规范文件",
+          "href": "",
+          "icon": "",
+          "target": "_self",
+          "child": [
+            {
+              "title": "规范文件",
+              "href": "standard.html",
+              "icon": "",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
